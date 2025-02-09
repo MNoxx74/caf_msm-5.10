@@ -3513,6 +3513,9 @@
 			just as if they had also been called out in the
 			rcu_nocbs= boot parameter.
 
+			Note that this argument takes precedence over
+			the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
+
 	noiotrap	[SH] Disables trapped I/O port accesses.
 
 	noirqdebug	[X86-32] Disables the code which attempts to detect and
@@ -3748,6 +3751,8 @@
 	pelt=		[KNL] Boot-time parameter changing the PELT half life in ms
 			Format: <int>
 			32: Set the half life to 32ms
+			16: Set the half life to 16ms
+			12: Set the half life to 12ms
 			8: Set the half life to 8ms
 			default: 32
 
@@ -4165,6 +4170,16 @@
 	printk.time=	Show timing data prefixed to each printk message line
 			Format: <bool>  (1/Y/y=enable, 0/N/n=disable)
 
+	proc_mem.force_override= [KNL]
+			Format: {always | ptrace | never}
+			Traditionally /proc/pid/mem allows memory permissions to be
+			overridden without restrictions. This option may be set to
+			restrict that. Can be one of:
+			- 'always': traditional behavior always allows mem overrides.
+			- 'ptrace': only allow mem overrides for active ptracers.
+			- 'never':  never allow mem overrides.
+			If not specified, default is the CONFIG_PROC_MEM_* choice.
+
 	processor.max_cstate=	[HW,ACPI]
 			Limit processor to maximum C-state
 			max_cstate=9 overrides any DMI blacklist limit.
@@ -4278,6 +4293,9 @@
 			workloads.  It can also improve energy efficiency
 			for asymmetric multiprocessors.
 
+			Note that this argument takes precedence over
+			the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
+
 	rcu_nocb_poll	[KNL]
 			Rather than requiring that offloaded CPUs
 			(specified by rcu_nocbs= above) explicitly
@@ -4339,6 +4357,11 @@
 			pressure to page allocator, also it makes the
 			whole algorithm to behave better in low memory
 			condition.
+
+	rcutree.rcu_delay_page_cache_fill_msec= [KNL]
+			Set the page-cache refill delay (in milliseconds)
+			in response to low-memory conditions.  The range
+			of permitted values is in the range 0:100000.
 
 	rcutree.jiffies_till_first_fqs= [KNL]
 			Set delay from grace-period initialization to
@@ -4655,6 +4678,10 @@
 
 	rcutorture.verbose= [KNL]
 			Enable additional printk() statements.
+
+	rcupdate.boot_end_delay= [KNL]
+			Minimum time in milliseconds that must elapse
+			before the boot sequence can be marked complete.
 
 	rcupdate.rcu_cpu_stall_ftrace_dump= [KNL]
 			Dump ftrace buffer after reporting RCU CPU
